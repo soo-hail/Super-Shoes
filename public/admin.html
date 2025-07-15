@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - SuperShoes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-sans bg-gray-50">
+  <!-- Admin Access Check -->
+  <script>
+    if (sessionStorage.getItem("isAdmin") !== "true") {
+      alert("Access denied. Please login as admin.");
+      window.location.href = "admin-login.html";
+    }
+  </script>
+
+  <!-- Admin Navigation -->
+  <header class="sticky top-0 z-10">
+    <nav class="bg-gradient-to-r from-red-600 to-orange-500 px-6 py-4 text-white shadow-lg">
+      <div class="container mx-auto flex flex-col md:flex-row justify-between items-center">
+        <div class="text-2xl font-bold mb-4 md:mb-0 flex items-center">
+          <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg> -->
+          SuperShoes Admin
+        </div>
+        <div class="flex flex-wrap items-center gap-4 md:gap-6">
+          <a href="#dashboard" class="hover:text-gray-200 transition duration-200 font-medium">Dashboard</a>
+          <a href="#orders" class="hover:text-gray-200 transition duration-200 font-medium">Orders</a>
+          <a href="#returns" class="hover:text-gray-200 transition duration-200 font-medium">Returns</a>
+          <a href="#products" class="hover:text-gray-200 transition duration-200 font-medium">Products</a>
+          <button onclick="adminLogout()" class="ml-2 bg-white text-red-600 px-4 py-2 rounded-lg font-medium hover:bg-gray-100 transition duration-200 shadow-sm flex items-center">
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+            </svg> -->
+            Logout
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container mx-auto px-4 py-8 max-w-7xl">
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+        </svg>
+        Dashboard Overview
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200 border-l-4 border-red-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-gray-600 font-medium mb-2">Total Orders</h3>
+              <p id="total-orders" class="text-3xl font-bold text-gray-800">Loading...</p>
+            </div>
+            <div class="bg-red-100 p-3 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200 border-l-4 border-orange-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-gray-600 font-medium mb-2">Pending Returns</h3>
+              <p id="total-returns" class="text-3xl font-bold text-gray-800">Loading...</p>
+            </div>
+            <div class="bg-orange-100 p-3 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-orange-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-200 border-l-4 border-green-500">
+          <div class="flex justify-between items-start">
+            <div>
+              <h3 class="text-gray-600 font-medium mb-2">Total Revenue</h3>
+              <p id="total-revenue" class="text-3xl font-bold text-gray-800">Loading...</p>
+            </div>
+            <div class="bg-green-100 p-3 rounded-full">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  <!-- Orders Section -->
+<section id="orders" class="mb-12">
+  <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+    </svg>
+    Order Management
+  </h2>
+  
+  <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div class="p-6">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-700">All Orders</h3>
+          <p class="text-sm text-gray-500">Manage and track customer orders</p>
+        </div>
+        <div class="flex items-center gap-3 w-full md:w-auto">
+          <div class="relative w-full md:w-64">
+            <input type="text" id="order-search" placeholder="Search orders..." 
+                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+            </svg>
+          </div>
+          <button class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg flex items-center gap-2 transition whitespace-nowrap">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+            </svg>
+            Export
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto" id="orders-section">
+        <!-- Table content will be dynamically inserted here -->
+      </div>
+
+      <!-- Pagination -->
+      <div class="bg-gray-50 px-6 py-4 flex items-center justify-between border-t border-gray-200" id="pagination-section">
+        <!-- Pagination will be dynamically generated -->
+      </div>
+    </div>
+  </div>
+</section>
+
+    <!-- Returns Section -->
+    <section id="returns" class="mb-12">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+        </svg>
+        Return Requests
+      </h2>
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-semibold text-gray-700">Pending Returns</h3>
+            <div class="flex gap-2">
+              <button class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                Export
+              </button>
+              <button class="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-sm font-medium hover:bg-orange-200 transition">
+                Filter
+              </button>
+            </div>
+          </div>
+          <div id="returns-section" class="overflow-x-auto">
+            <div class="min-w-full">
+              <div class="bg-gray-50 rounded-lg p-4 text-center text-gray-500">
+                Loading return requests...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+        </svg>
+        Product Management
+      </h2>
+      
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-8">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">Add New Product</h3>
+          <form id="add-product-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div>
+              <label for="product-id" class="block text-sm font-medium text-gray-700 mb-1">Product ID</label>
+              <input type="text" id="product-id" placeholder="SHOES-001" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+            </div>
+            <div>
+              <label for="product-name" class="block text-sm font-medium text-gray-700 mb-1">Product Name</label>
+              <input type="text" id="product-name" placeholder="Running Shoes" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+            </div>
+            <div>
+              <label for="product-price" class="block text-sm font-medium text-gray-700 mb-1">Price (₹)</label>
+              <input type="number" id="product-price" placeholder="2999" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+            </div>
+            <div>
+              <label for="product-type" class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+              <input type="text" id="product-type" placeholder="Sneakers" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+            </div>
+            <div>
+              <label for="product-image" class="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+              <input type="text" id="product-image" placeholder="https://example.com/image.jpg" required 
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+            </div>
+            <div class="md:col-span-2 lg:col-span-5 flex justify-end">
+              <button type="submit" 
+                      class="bg-gradient-to-r from-red-600 to-orange-500 text-white font-medium py-2 px-6 rounded-lg shadow-md hover:from-red-700 hover:to-orange-600 transition duration-200 flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Add Product
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="p-6">
+          <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+            <h3 class="text-lg font-semibold text-gray-700">Product Inventory</h3>
+            <div class="flex gap-2 w-full md:w-auto">
+              <div class="relative w-full md:w-64">
+                <input type="text" id="product-search" placeholder="Search products..." class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <button class="px-3 py-1.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition whitespace-nowrap">
+                Export CSV
+              </button>
+            </div>
+          </div>
+          <div id="product-list" class="overflow-x-auto">
+            <div class="min-w-full">
+              <div class="bg-gray-50 rounded-lg p-4 text-center text-gray-500">
+                Loading product inventory...
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- JavaScript for Data Loading -->
+  <script>
+    function updateOrderStatus(orderId, status) {
+      fetch("http://localhost:5000/update-order-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: orderId, status })
+      })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          loadOrders(); // Refresh list
+        })
+        .catch(err => {
+          alert("Error updating order status.");
+          console.error(err);
+        });
+    }
+
+    function updateRequest(id, status) {
+      fetch("http://localhost:5000/update-return-status", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status })
+      })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          loadReturnRequests(); // Refresh
+        })
+        .catch(err => {
+          alert("Error updating status.");
+          console.error(err);
+        });
+    }
+
+    function deleteProduct(productId) {
+      if (!confirm("Are you sure you want to delete this product?")) return;
+
+      fetch("http://localhost:5000/delete-product", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId })
+      })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          loadProducts();
+        })
+        .catch(err => {
+          alert("Error deleting product.");
+          console.error(err);
+        });
+    }
+
+    // Search Orders
+    function searchOrders() {
+      const searchTerm = document.getElementById('order-search').value.toLowerCase();
+      const rows = document.querySelectorAll('#orders-section tbody tr');
+      
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+      });
+    }
+
+    // Search Products
+    function searchProducts() {
+      const searchTerm = document.getElementById('product-search').value.toLowerCase();
+      const rows = document.querySelectorAll('#product-list tbody tr');
+      
+      rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+      });
+    }
+
+    // Helper function for status styling
+    function getStatusClass(status) {
+      switch(status.toLowerCase()) {
+        case 'delivered':
+          return 'bg-green-100 text-green-800';
+        case 'placed':
+          return 'bg-yellow-100 text-yellow-800';
+        case 'shipped':
+          return 'bg-blue-100 text-blue-800';
+        case 'out for delivery':
+          return 'bg-purple-100 text-purple-800';
+        case 'pending':
+          return 'bg-yellow-100 text-yellow-800';
+        case 'approved':
+          return 'bg-green-100 text-green-800';
+        case 'rejected':
+          return 'bg-red-100 text-red-800';
+        default:
+          return 'bg-gray-100 text-gray-800';
+      }
+    }
+
+    // Setup event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Setup search functionality
+      document.getElementById('order-search').addEventListener('input', searchOrders);
+      document.getElementById('product-search').addEventListener('input', searchProducts);
+    });
+
+    // Filter orders by status
+  document.getElementById('order-status-filter').addEventListener('change', function() {
+    const filterValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#orders-section tbody tr');
+    
+    rows.forEach(row => {
+      const statusCell = row.querySelector('td:nth-child(6) span');
+      const statusText = statusCell.textContent.trim().toLowerCase();
+      
+      if (filterValue === 'all' || statusText === filterValue) {
+        row.style.display = '';
+      } else {
+        row.style.display = 'none';
+      }
+    });
+  });
+
+  </script>
+  
+  <!-- Import the admin.js file -->
+  <script src="admin.js"></script>
+</body>
+</html>
