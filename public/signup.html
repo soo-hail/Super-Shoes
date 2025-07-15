@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up | SuperShoes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .auth-container {
+      animation: fadeIn 0.5s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .input-field:focus {
+      box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.2);
+    }
+    .password-strength {
+      height: 4px;
+      transition: width 0.3s ease, background-color 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+  <!-- Enhanced Auth Container -->
+  <div class="auth-container bg-white rounded-xl shadow-lg overflow-hidden w-full max-w-md mx-4">
+    <!-- Header Section -->
+    <div class="bg-gradient-to-r from-red-600 to-orange-500 p-6 text-center">
+      <h1 class="text-2xl font-bold text-white">Join SuperShoes</h1>
+      <p class="text-white opacity-90 mt-1">Create your account in seconds</p>
+    </div>
+    
+    <!-- Form Section -->
+    <div class="p-6 md:p-8">
+      <form id="signupForm">
+        <!-- Name Field -->
+        <div class="mb-4">
+          <label for="signup-name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-user text-gray-400"></i>
+            </div>
+            <input 
+              type="text" 
+              id="signup-name" 
+              placeholder="John Doe" 
+              class="input-field pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 transition"
+              required
+            />
+          </div>
+        </div>
+        
+        <!-- Email Field -->
+        <div class="mb-4">
+          <label for="signup-email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-envelope text-gray-400"></i>
+            </div>
+            <input 
+              type="email" 
+              id="signup-email" 
+              placeholder="your@email.com" 
+              class="input-field pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 transition"
+              required
+            />
+          </div>
+        </div>
+        
+        <!-- Password Field -->
+        <div class="mb-6">
+          <label for="signup-password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-lock text-gray-400"></i>
+            </div>
+            <input 
+              type="password" 
+              id="signup-password" 
+              placeholder="••••••••" 
+              class="input-field pl-10 w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-red-500 transition"
+              required
+              oninput="checkPasswordStrength()"
+            />
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
+              <button type="button" class="text-gray-400 hover:text-gray-600" onclick="togglePasswordVisibility('signup-password')">
+                <i class="fas fa-eye" id="password-toggle-icon"></i>
+              </button>
+            </div>
+          </div>
+          <!-- Password Strength Meter -->
+          <div class="mt-2">
+            <div class="flex justify-between text-xs text-gray-500 mb-1">
+              <span>Password Strength</span>
+              <span id="strength-text">Weak</span>
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-1">
+              <div id="password-strength" class="password-strength rounded-full bg-red-500 w-1/4"></div>
+            </div>
+          </div>
+          <div class="mt-2 text-xs text-gray-500">
+            <p>Use 8+ characters with a mix of letters, numbers & symbols</p>
+          </div>
+        </div>
+        
+        <!-- Terms Checkbox -->
+        <div class="mb-6 flex items-center">
+          <input 
+            type="checkbox" 
+            id="terms-checkbox" 
+            class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+            required
+          />
+          <label for="terms-checkbox" class="ml-2 block text-sm text-gray-700">
+            I agree to the <a href="#" class="text-red-600 hover:text-red-800">Terms of Service</a> and <a href="#" class="text-red-600 hover:text-red-800">Privacy Policy</a>
+          </label>
+        </div>
+        
+        <!-- Submit Button -->
+        <button 
+          type="submit"
+          class="w-full bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 hover:shadow-md transform hover:scale-[1.01] active:scale-[0.99]"
+        >
+          Create Account
+        </button>
+      </form>
+      
+      <!-- Social Signup -->
+      <div class="mt-6">
+        <div class="relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">Or sign up with</span>
+          </div>
+        </div>
+        
+        <div class="mt-6 grid grid-cols-2 gap-3">
+          <button 
+            type="button"
+            class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <i class="fab fa-google text-red-500 mr-2"></i> Google
+          </button>
+          <button 
+            type="button"
+            class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-md shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <i class="fab fa-facebook-f text-blue-600 mr-2"></i> Facebook
+          </button>
+        </div>
+      
+      <!-- Login Link -->
+      <div class="mt-6 text-center text-sm">
+        <p class="text-gray-600">Already have an account? 
+          <a href="login.html" class="font-medium text-red-600 hover:text-red-800">Log in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle password visibility
+    function togglePasswordVisibility(fieldId) {
+      const passwordInput = document.getElementById(fieldId);
+      const icon = document.getElementById('password-toggle-icon');
+      
+      if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+      } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+      }
+    }
+    
+    // Check password strength
+    function checkPasswordStrength() {
+      const password = document.getElementById('signup-password').value;
+      const strengthBar = document.getElementById('password-strength');
+      const strengthText = document.getElementById('strength-text');
+      
+      // Reset
+      let strength = 0;
+      strengthBar.style.width = '0%';
+      strengthBar.className = 'password-strength rounded-full bg-red-500';
+      
+      if (password.length >= 8) strength += 1;
+      if (password.match(/[a-z]/)) strength += 1;
+      if (password.match(/[A-Z]/)) strength += 1;
+      if (password.match(/[0-9]/)) strength += 1;
+      if (password.match(/[^a-zA-Z0-9]/)) strength += 1;
+      
+      // Update UI
+      if (strength > 0) {
+        const width = (strength / 5) * 100;
+        strengthBar.style.width = `${width}%`;
+        
+        if (strength <= 2) {
+          strengthBar.className = 'password-strength rounded-full bg-red-500';
+          strengthText.textContent = 'Weak';
+        } else if (strength <= 4) {
+          strengthBar.className = 'password-strength rounded-full bg-yellow-500';
+          strengthText.textContent = 'Medium';
+        } else {
+          strengthBar.className = 'password-strength rounded-full bg-green-500';
+          strengthText.textContent = 'Strong';
+        }
+      }
+    }
+    
+    // Handle form submission
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      signup();
+    });
+    
+    // Signup function
+    function signup() {
+      const name = document.getElementById("signup-name").value.trim();
+      const email = document.getElementById("signup-email").value.trim();
+      const password = document.getElementById("signup-password").value.trim();
+      const termsChecked = document.getElementById("terms-checkbox").checked;
+      
+      // Validation
+      if (!name || !email || !password) {
+        showAlert('Please fill in all fields', 'error');
+        return;
+      }
+      
+      if (!termsChecked) {
+        showAlert('Please agree to the terms and conditions', 'error');
+        return;
+      }
+      
+      let users = JSON.parse(localStorage.getItem("users")) || [];
+      
+      if (users.some(u => u.email === email)) {
+        showAlert('This email is already registered', 'error');
+        return;
+      }
+      
+      const newUser = { 
+        name, 
+        email, 
+        password,
+        joinDate: new Date().toISOString()
+      };
+      
+      users.push(newUser);
+      localStorage.setItem("users", JSON.stringify(users));
+      
+      showAlert('Account created successfully! Redirecting to login...', 'success');
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 1500);
+    }
+    
+    // Show alert message
+    function showAlert(message, type) {
+      // Remove any existing alerts
+      const existingAlert = document.querySelector('.alert-message');
+      if (existingAlert) existingAlert.remove();
+      
+      const alert = document.createElement('div');
+      alert.className = `alert-message fixed top-4 right-4 px-4 py-3 rounded-md shadow-lg text-white ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+      }`;
+      alert.innerHTML = `
+        <div class="flex items-center">
+          <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'} mr-2"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      document.body.appendChild(alert);
+      
+      setTimeout(() => {
+        alert.style.opacity = '0';
+        alert.style.transform = 'translateY(-20px)';
+        setTimeout(() => alert.remove(), 300);
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
