@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Profile - SuperShoes</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+    }
+    
+    .order-card, .wishlist-card, .return-card {
+      transition: all 0.3s ease;
+    }
+    
+    .order-card:hover, .wishlist-card:hover, .return-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .progress-step {
+      position: relative;
+    }
+    
+    .progress-step:not(:last-child):after {
+      content: '';
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 2px;
+      background-color: #e5e7eb;
+    }
+    
+    .progress-step.active:not(:last-child):after {
+      background-color: #f97316;
+    }
+    
+    .badge {
+      font-size: 0.75rem;
+      padding: 0.25rem 0.5rem;
+    }
+    
+    .nav-tab.active {
+      border-bottom: 2px solid #f97316;
+      color: #f97316;
+    }
+    
+    /* Custom scrollbar */
+    .scroll-container::-webkit-scrollbar {
+      height: 6px;
+      width: 6px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb {
+      background: #f97316;
+      border-radius: 10px;
+    }
+    
+    .scroll-container::-webkit-scrollbar-thumb:hover {
+      background: #ea580c;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <header class="bg-gradient-to-r from-red-600 to-orange-400 p-4 shadow-md">
+    <nav class="flex justify-between items-center">
+      <div class="text-white text-2xl font-bold">SuperShoes</div>
+      <ul class="flex space-x-6 text-white text-base items-center">
+        <li><a href="index.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Home</a></li>
+        <li><a href="product.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Products</a></li>
+        <li><a href="cart.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Cart</a></li>
+        <li><a href="wishlist.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Wishlist</a></li>
+        <li><a href="profile.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Profile</a></li>
+        
+        <!-- Conditional Login/Logout Button -->
+        <li id="authButton">
+          <button onclick="handleAuthAction()" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">
+            <span id="authText">Login</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Profile Content -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- User Profile Header -->
+    <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="w-24 h-24 rounded-full bg-gradient-to-r from-red-500 to-orange-400 flex items-center justify-center text-white text-4xl font-bold mb-4 md:mb-0 md:mr-6">
+          <span id="userInitials">SK</span>
+        </div>
+        <div class="text-center md:text-left">
+          <h1 id="userName" class="text-2xl font-bold text-gray-800">Sabahat Kulsum</h1>
+          <p id="userEmail" class="text-gray-600">sabahatkulsum2703@gmail.com</p>
+          <div class="mt-3 flex justify-center md:justify-start space-x-3">
+            <button onclick="editProfile()" class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors text-sm font-medium">
+              <i class="fas fa-user-edit mr-2"></i>Edit Profile
+            </button>
+            <button onclick="viewAddresses()" class="px-4 py-2 border border-orange-500 text-orange-500 rounded-lg hover:bg-orange-50 transition-colors text-sm font-medium">
+              <i class="fas fa-map-marker-alt mr-2"></i>My Addresses
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="border-b border-gray-200 mb-8">
+      <nav class="flex space-x-8 overflow-x-auto scroll-container">
+        <button id="ordersTab" class="nav-tab active py-4 px-1 font-medium text-sm whitespace-nowrap">
+          <i class="fas fa-receipt mr-2"></i>My Orders
+        </button>
+        <button id="wishlistTab" class="nav-tab py-4 px-1 font-medium text-sm whitespace-nowrap">
+          <i class="fas fa-heart mr-2"></i>Wishlist
+        </button>
+        <button id="returnsTab" class="nav-tab py-4 px-1 font-medium text-sm whitespace-nowrap">
+          <i class="fas fa-exchange-alt mr-2"></i>Returns & Exchanges
+        </button>
+        <button id="settingsTab" class="nav-tab py-4 px-1 font-medium text-sm whitespace-nowrap">
+          <i class="fas fa-cog mr-2"></i>Account Settings
+        </button>
+      </nav>
+    </div>
+
+    <!-- Tab Content -->
+    <div id="ordersContent" class="tab-content">
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-receipt text-orange-500 mr-3"></i>Order History
+      </h2>
+      
+      <div id="order-history" class="space-y-4">
+        <div class="animate-pulse flex flex-col space-y-4">
+          <div class="h-24 bg-gray-200 rounded-lg"></div>
+          <div class="h-24 bg-gray-200 rounded-lg"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="wishlistContent" class="tab-content hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-heart text-orange-500 mr-3"></i>My Wishlist
+      </h2>
+      
+      <div id="wishlist-items" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="animate-pulse h-64 bg-gray-200 rounded-lg"></div>
+        <div class="animate-pulse h-64 bg-gray-200 rounded-lg"></div>
+      </div>
+    </div>
+
+    <div id="returnsContent" class="tab-content hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-exchange-alt text-orange-500 mr-3"></i>Returns & Exchanges
+      </h2>
+      
+      <div id="return-history" class="space-y-4">
+        <div class="animate-pulse h-32 bg-gray-200 rounded-lg"></div>
+      </div>
+    </div>
+
+    <div id="settingsContent" class="tab-content hidden">
+      <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <i class="fas fa-cog text-orange-500 mr-3"></i>Account Settings
+      </h2>
+      
+      <div class="bg-white rounded-xl shadow-sm p-6">
+        <div class="space-y-6">
+          <div>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Personal Information</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                <input type="text" value="John" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                <input type="text" value="Doe" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" value="john.doe@example.com" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                <input type="tel" value="+1 (555) 123-4567" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+              </div>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Password</h3>
+            <div class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+                <input type="password" placeholder="Enter current password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+                <input type="password" placeholder="Enter new password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+                <input type="password" placeholder="Confirm new password" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-orange-500 focus:border-orange-500">
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex justify-end">
+            <button class="px-6 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors font-medium">
+              Save Changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <h3 class="text-xl font-bold mb-4 flex items-center">
+            <i class="fas fa-shoe-prints mr-2"></i>
+            SuperShoes
+          </h3>
+          <p class="text-gray-400">Step into style with our premium footwear collection.</p>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Shop</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">Men's Shoes</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Women's Shoes</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Kids' Shoes</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">New Arrivals</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Help</h4>
+          <ul class="space-y-2 text-gray-400">
+            <li><a href="#" class="hover:text-white transition-colors">Customer Service</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Track Order</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">Returns & Exchanges</a></li>
+            <li><a href="#" class="hover:text-white transition-colors">FAQs</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Contact</h4>
+          <address class="not-italic text-gray-400 space-y-2">
+            <p><i class="fas fa-map-marker-alt mr-2"></i> 123 Shoe Street, Footwear City</p>
+            <p><i class="fas fa-phone-alt mr-2"></i> (123) 456-7890</p>
+            <p><i class="fas fa-envelope mr-2"></i> hello@supershoes.com</p>
+          </address>
+        </div>
+      </div>
+      <div class="border-t border-gray-700 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 text-sm">© 2025 SuperShoes. All rights reserved.</p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+          <a href="#" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Check login status on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      updateAuthButton();
+    });
+  
+    // Update auth button based on login status
+    function updateAuthButton() {
+      const authButton = document.getElementById('authButton');
+      const authText = document.getElementById('authText');
+      const authIcon = document.getElementById('authIcon');
+      const isLoggedIn = localStorage.getItem('loggedInUser') !== null;
+  
+      if (isLoggedIn) {
+        authText.textContent = 'Logout';
+        authIcon.className = 'fas fa-sign-out-alt ml-1';
+      } else {
+        authText.textContent = 'Login';
+        authIcon.className = 'fas fa-sign-in-alt ml-1';
+      }
+    }
+  
+    // Handle auth action (login/logout)
+    function handleAuthAction() {
+      const isLoggedIn = localStorage.getItem('loggedInUser') !== null;
+      
+      if (isLoggedIn) {
+        // Show confirmation dialog for logout
+        Swal.fire({
+          title: 'Logout?',
+          text: 'Are you sure you want to logout?',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#d33',
+          cancelButtonColor: '#3085d6',
+          confirmButtonText: 'Yes, logout'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            logout();
+          }
+        });
+      } else {
+        // Redirect to login page
+        window.location.href = 'login.html';
+      }
+    }
+  
+    // Logout function
+    function logout() {
+      localStorage.removeItem('loggedInUser');
+      sessionStorage.clear();
+      
+      // Show success message
+      Swal.fire({
+        icon: 'success',
+        title: 'Logged Out',
+        text: 'You have been logged out successfully.',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        // Update button and redirect to home
+        updateAuthButton();
+        window.location.href = 'index.html';
+      });
+    }
+  </script>
+  
+
+  <script src="profile.js"></script>
+</body>
+</html>
