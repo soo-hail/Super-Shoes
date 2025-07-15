@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SuperShoes | Wishlist</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .wishlist-item {
+            transition: all 0.3s ease;
+        }
+        .wishlist-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .empty-wishlist {
+            animation: fadeIn 0.5s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Enhanced Navbar -->
+    <header class="bg-gradient-to-r from-red-600 to-orange-400 p-4 shadow-md">
+        <nav class="flex justify-between items-center">
+          <div class="text-white text-2xl font-bold">SuperShoes</div>
+          <ul class="flex space-x-6 text-white text-base">
+            <li><a href="index.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Home</a></li>
+            <li><a href="product.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Products</a></li>
+            <li><a href="cart.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Cart</a></li>
+            <li><a href="wishlist.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Wishlist</a></li>
+            <li><a href="profile.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Profile</a></li>
+            <li><a href="login.html" class="relative transition-opacity duration-300 active:opacity-50 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-full after:h-[1px] after:bg-white after:scale-x-0 after:origin-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-left">Login</a></li>
+          </ul>
+        </nav>
+      </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8 max-w-6xl mt-20">
+        <!-- Header -->
+    <header class="mb-8">
+        <h1 class="text-[32px] font-bold text-gray-800 text-center my-[30px] relative after:content-[''] after:absolute after:w-[80px] after:h-[3px] after:bg-orange-500 after:bottom-[-10px] after:left-1/2 after:transform after:translate-x-[-50%]">
+            Wishlist
+        </h1>
+        <div class="flex justify-center mt-2">
+          <a href="product.html" class="text-blue-600 hover:text-blue-800 flex items-center gap-1 transition-colors">
+            <i class="fas fa-arrow-left text-sm"></i>
+            <span class="font-bold">Continue Shopping</span>
+          </a>
+        </div>
+      </header>
+
+        <!-- Wishlist Items -->
+        <div id="wishlist-items" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Wishlist items will be dynamically added here -->
+        </div>
+
+        <!-- Empty State (hidden by default) -->
+        <div id="empty-wishlist" class="hidden text-center py-16 empty-wishlist">
+            <div class="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-heart text-3xl text-gray-400"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-800 mb-2">Your wishlist is empty</h3>
+            <p class="text-gray-600 mb-6">Looks like you haven't added any items to your wishlist yet.</p>
+            <a href="product.html" class="inline-block bg-gradient-to-r from-red-500 to-orange-400 hover:from-red-600 hover:to-orange-500 text-white font-medium py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg">
+                Browse Products
+            </a>
+        </div>
+    </main>
+
+    <!-- Footer - Added margin-top-0 to remove gap -->
+<!-- Footer - Fixed styling and positioning -->
+<footer class="bg-gray-900 text-white mt-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 py-12">
+            <div>
+                <h3 class="text-xl font-bold mb-4">SuperShoes</h3>
+                <p class="text-gray-400 mb-4">Bringing comfort and style to your every step since 2010.</p>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Shop</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Men's Collection</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Women's Collection</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Kids' Collection</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">New Arrivals</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sale</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Customer Service</h4>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Contact Us</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">FAQs</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Shipping & Returns</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Size Guide</a></li>
+                    <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Track Your Order</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold mb-4">Newsletter</h4>
+                <p class="text-gray-400 mb-4">Subscribe to get special offers and updates.</p>
+                <div class="flex">
+                    <input type="email" placeholder="Your email" class="p-3 w-full rounded-l-md focus:outline-none bg-gray-700 text-white placeholder-gray-400">
+                    <button class="bg-red-600 text-white px-4 rounded-r-md hover:bg-red-700 transition-colors">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 pt-8 pb-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 mb-4 md:mb-0">&copy; 2025 SuperShoes. All Rights Reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script>
+        // Mobile menu toggle functionality
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+            
+            // Toggle between hamburger and close icon
+            const icon = this.querySelector('i');
+            if (menu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+    </script>
+
+    <script src="wishlist.js"></script>
+</body>
+</html>
